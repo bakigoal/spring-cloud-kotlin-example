@@ -10,18 +10,14 @@ import kotlin.random.Random
 @Service
 class LicenseService(@Autowired val messages: MessageSource) {
 
-    fun getLicense(licenseId: String, organizationId: String): License {
-        val license = License()
-        license.let {
-            it.id = Random(1000).nextInt(1000)
-            it.licenseId = licenseId
-            it.organizationId = organizationId
-            it.description = "Software Product"
-            it.productName = "Ostock"
-            it.licenseType = "full"
-        }
-        return license
-    }
+    fun getLicense(licenseId: String, organizationId: String) = License(
+        id = Random(1000).nextInt(1000),
+        licenseId = licenseId,
+        organizationId = organizationId,
+        description = "Software Product",
+        productName = "Ostock",
+        licenseType = "full"
+    )
 
     fun createLicense(license: License?, organizationId: String, locale: Locale?): String {
         var responseMessage = ""
