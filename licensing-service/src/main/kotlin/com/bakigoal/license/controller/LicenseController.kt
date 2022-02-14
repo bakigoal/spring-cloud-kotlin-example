@@ -5,6 +5,7 @@ import com.bakigoal.license.service.LicenseService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @RequestMapping("v1/organization/{organizationId}/license")
@@ -21,17 +22,19 @@ class LicenseController (@Autowired val licenseService: LicenseService) {
     @PostMapping
     fun createLicense(
         @PathVariable("organizationId") organizationId: String,
-        @RequestBody license: License
+        @RequestBody license: License,
+        @RequestHeader(value = "Accept-Language", required = false) locale: Locale?
     ): ResponseEntity<String> {
-        return ResponseEntity.ok(licenseService.createLicense(license, organizationId))
+        return ResponseEntity.ok(licenseService.createLicense(license, organizationId, locale))
     }
 
     @PutMapping
     fun updateLicense(
         @PathVariable("organizationId") organizationId: String,
-        @RequestBody license: License
+        @RequestBody license: License,
+        @RequestHeader(value = "Accept-Language", required = false) locale: Locale?
     ): ResponseEntity<String> {
-        return ResponseEntity.ok(licenseService.updateLicense(license, organizationId))
+        return ResponseEntity.ok(licenseService.updateLicense(license, organizationId, locale))
     }
 
     @DeleteMapping("/{licenseId}")
