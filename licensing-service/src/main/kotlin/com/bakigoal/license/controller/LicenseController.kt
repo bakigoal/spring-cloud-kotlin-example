@@ -53,22 +53,20 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
     private fun addHateoasLinks(license: License, organizationId: String) {
         license.add(
             linkTo(
-                methodOn(LicenseController::class.java).getLicense(
-                    organizationId,
-                    license.licenseId!!
-                )
-            ).withSelfRel(), linkTo(
-                methodOn(
-                    LicenseController::class.java
-                ).createLicense(organizationId, license, null)
-            ).withRel("createLicense"), linkTo(
-                methodOn(
-                    LicenseController::class.java
-                ).updateLicense(organizationId, license, null)
-            ).withRel("updateLicense"), linkTo(
-                methodOn(
-                    LicenseController::class.java
-                ).deleteLicense(organizationId, license.licenseId!!, null)
+                methodOn(LicenseController::class.java)
+                    .getLicense(organizationId, license.licenseId!!)
+            ).withSelfRel(),
+            linkTo(
+                methodOn(LicenseController::class.java)
+                    .createLicense(organizationId, license, null)
+            ).withRel("createLicense"),
+            linkTo(
+                methodOn(LicenseController::class.java)
+                    .updateLicense(organizationId, license, null)
+            ).withRel("updateLicense"),
+            linkTo(
+                methodOn(LicenseController::class.java)
+                    .deleteLicense(organizationId, license.licenseId!!, null)
             ).withRel("deleteLicense")
         )
     }
