@@ -21,7 +21,7 @@ class LocalizationConfig {
     fun messages(): ResourceBundleMessageSource {
         val messageSource = ResourceBundleMessageSource()
         messageSource.setUseCodeAsDefaultMessage(true)
-        messageSource.setBasename("messages")
+        messageSource.setBasename("messages/messages")
         messageSource.setDefaultEncoding("UTF-8")
         return messageSource
     }
