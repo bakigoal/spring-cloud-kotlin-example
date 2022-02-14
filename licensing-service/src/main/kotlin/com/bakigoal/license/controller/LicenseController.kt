@@ -40,9 +40,10 @@ class LicenseController (@Autowired val licenseService: LicenseService) {
     @DeleteMapping("/{licenseId}")
     fun deleteLicense(
         @PathVariable("organizationId") organizationId: String,
-        @PathVariable("licenseId") licenseId: String
+        @PathVariable("licenseId") licenseId: String,
+        @RequestHeader(value = "Accept-Language", required = false) locale: Locale?
     ): ResponseEntity<String> {
-        return ResponseEntity.ok(licenseService.deleteLicense(licenseId, organizationId))
+        return ResponseEntity.ok(licenseService.deleteLicense(licenseId, organizationId, locale))
     }
 
 }

@@ -43,8 +43,11 @@ class LicenseService(@Autowired val messages: MessageSource) {
         return responseMessage
     }
 
-    fun deleteLicense(licenseId: String, organizationId: String): String {
-        return "Deleting license with id $licenseId for the organization $organizationId"
+    fun deleteLicense(licenseId: String, organizationId: String, locale: Locale?): String {
+        return String.format(
+            messages.getMessage("license.delete.message", null, locale ?: Locale.US),
+            licenseId, organizationId
+        )
     }
 
 }
