@@ -8,13 +8,23 @@ import org.springframework.web.client.RestTemplate
 
 @Component
 class OrganizationRestTemplateClient(
+    /**
+     *
+     * @Bean
+     * @LoadBalanced
+     * fun restTemplate(): RestTemplate {
+     *    return RestTemplate()
+     * }
+     */
     @Autowired val restTemplate: RestTemplate
 ) {
 
     fun getOrganization(organizationId: String): OrganizationDto? {
         val serviceUri = "http://organization-service/v1/organization/$organizationId"
-        val exchange = restTemplate.exchange(serviceUri,
-            HttpMethod.GET, null, OrganizationDto::class.java, organizationId)
+        val exchange = restTemplate.exchange(
+            serviceUri,
+            HttpMethod.GET, null, OrganizationDto::class.java, organizationId
+        )
         return exchange.body
     }
 }
