@@ -1,12 +1,48 @@
 version: "3"
 services:
+  database:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB:       "licensing_dev"
+    volumes:
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/1-init.sql
+      - ./docker/postgres/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+    networks:
+      backend:
+        aliases:
+          - "database"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   config-server:
     build: ./config-server
     ports:
       - "8071:8071"
+    networks:
+      backend:
+        aliases:
+          - "configserver"
   licensing-service:
     build: ./licensing-service
+    environment:
+      SPRING_PROFILES_ACTIVE: "dev"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071"
+    depends_on:
+      database:
+        condition: service_healthy
+      config-server:
+        condition: service_started
     ports:
       - "8080:8080"
-    environment:
-      - "SPRING_PROFILES_ACTIVE=dev"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
