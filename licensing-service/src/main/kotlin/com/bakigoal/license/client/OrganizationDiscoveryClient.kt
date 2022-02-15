@@ -9,6 +9,10 @@ import org.springframework.web.client.RestTemplate
 
 @Component
 class OrganizationDiscoveryClient(
+    /**
+     * To use DiscoveryClient you should enable it
+     * @EnableDiscoveryClient
+     */
     @Autowired val discoveryClient: DiscoveryClient
 ) {
 
@@ -21,7 +25,8 @@ class OrganizationDiscoveryClient(
         }
 
         val serviceUri = "${instances[0].uri}/v1/organization/$organizationId"
-        val exchange = restTemplate.exchange(serviceUri, HttpMethod.GET, null, OrganizationDto::class.java, organizationId)
+        val exchange =
+            restTemplate.exchange(serviceUri, HttpMethod.GET, null, OrganizationDto::class.java, organizationId)
         return exchange.body
     }
 }
