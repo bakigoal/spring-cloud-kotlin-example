@@ -1,6 +1,6 @@
 package com.bakigoal.license.controller
 
-import com.bakigoal.license.model.License
+import com.bakigoal.license.dto.LicenseDto
 import com.bakigoal.license.service.LicenseService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
@@ -13,11 +13,20 @@ import java.util.*
 @RequestMapping("v1/organization/{organizationId}/license")
 class LicenseController(@Autowired val licenseService: LicenseService) {
 
+    @GetMapping("/{licenseId}/{clientType}")
+    fun getLicenseWithClient(
+        @PathVariable("organizationId") organizationId: String,
+        @PathVariable("licenseId") licenseId: String,
+        @PathVariable("clientType") clientType: String
+    ): LicenseDto {
+        return licenseService.getLicense(licenseId, organizationId, clientType)
+    }
+
     @GetMapping("/{licenseId}")
     fun getLicense(
         @PathVariable("organizationId") organizationId: String,
         @PathVariable("licenseId") licenseId: String
-    ): ResponseEntity<License> {
+    ): ResponseEntity<LicenseDto> {
         val license = licenseService.getLicense(licenseId, organizationId)
         addHateoasLinks(license, organizationId)
         return ResponseEntity.ok(license)
@@ -26,8 +35,8 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
     @PostMapping
     fun createLicense(
         @PathVariable("organizationId") organizationId: String,
-        @RequestBody license: License
-    ): ResponseEntity<License> {
+        @RequestBody license: LicenseDto
+    ): ResponseEntity<LicenseDto> {
         return ResponseEntity.ok(licenseService.createLicense(license))
     }
 
@@ -35,8 +44,8 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
     fun updateLicense(
         @PathVariable("organizationId") organizationId: String,
         @PathVariable("licenseId") licenseId: String,
-        @RequestBody license: License
-    ): ResponseEntity<License> {
+        @RequestBody license: LicenseDto
+    ): ResponseEntity<LicenseDto> {
         license.licenseId = licenseId
         return ResponseEntity.ok(licenseService.updateLicense(license))
     }
@@ -50,7 +59,7 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
         return ResponseEntity.ok(licenseService.deleteLicense(licenseId, locale))
     }
 
-    private fun addHateoasLinks(license: License, organizationId: String) {
+    private fun addHateoasLinks(license: LicenseDto, organizationId: String) {
         license.add(
             linkTo(
                 methodOn(LicenseController::class.java)

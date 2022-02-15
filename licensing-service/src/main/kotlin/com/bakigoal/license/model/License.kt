@@ -1,6 +1,5 @@
 package com.bakigoal.license.model
 
-import org.springframework.hateoas.RepresentationModel
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -18,6 +17,5 @@ data class License(
     var productName: String? = null,
     @Column(name = "license_type", nullable = false)
     var licenseType: String? = null,
-    var description: String? = null,
-    var comment: String? = null
-) : RepresentationModel<License>()
+    var description: String? = null
+)
