@@ -1,3 +1,3 @@
 rootProject.name = "spring-cloud-kotlin-example"
 
-include("licensing-service", "config-server")
+include("licensing-service", "config-server", "eurekaserver")

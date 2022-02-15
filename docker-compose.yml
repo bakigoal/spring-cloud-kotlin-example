@@ -28,6 +28,21 @@ services:
       backend:
         aliases:
           - "configserver"
+  eureka-server:
+    build: ./eurekaserver
+    ports:
+      - "8070:8070"
+    environment:
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071"
+    depends_on:
+      database:
+        condition: service_healthy
+      config-server:
+        condition: service_started
+    networks:
+      backend:
+        aliases:
+          - "eurekaserver"
   licensing-service:
     build: ./licensing-service
     environment:
