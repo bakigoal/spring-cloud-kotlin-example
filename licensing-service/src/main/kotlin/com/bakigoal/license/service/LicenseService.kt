@@ -1,6 +1,7 @@
 package com.bakigoal.license.service
 
 import com.bakigoal.license.client.OrganizationDiscoveryClient
+import com.bakigoal.license.client.OrganizationFeignClient
 import com.bakigoal.license.client.OrganizationRestTemplateClient
 import com.bakigoal.license.config.ServiceConfig
 import com.bakigoal.license.dto.LicenseDto
@@ -20,7 +21,8 @@ class LicenseService(
     @Autowired val licenseRepository: LicenseRepository,
     @Autowired val serviceConfig: ServiceConfig,
     @Autowired val organizationDiscoveryClient: OrganizationDiscoveryClient,
-    @Autowired val organizationRestTemplateClient: OrganizationRestTemplateClient
+    @Autowired val organizationRestTemplateClient: OrganizationRestTemplateClient,
+    @Autowired val organizationFeignClient: OrganizationFeignClient
 ) {
 
     fun getLicense(licenseId: String, organizationId: String, clientType: String): LicenseDto {
@@ -44,7 +46,7 @@ class LicenseService(
         return when (clientType) {
             "discovery" -> organizationDiscoveryClient.getOrganization(organizationId)
             "rest" -> organizationRestTemplateClient.getOrganization(organizationId)
-            "feign" -> organizationDiscoveryClient.getOrganization(organizationId)
+            "feign" -> organizationFeignClient.getOrganization(organizationId)
             else -> throw IllegalArgumentException("No rest client for $clientType")
         }
     }
