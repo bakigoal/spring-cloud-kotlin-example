@@ -1,52 +1,46 @@
 package com.bakigoal.license.service
 
+import com.bakigoal.license.config.ServiceConfig
 import com.bakigoal.license.model.License
+import com.bakigoal.license.repository.LicenseRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import java.util.*
-import kotlin.random.Random
+import java.util.UUID
 
 @Service
-class LicenseService(@Autowired val messages: MessageSource) {
+class LicenseService(
+    @Autowired val messages: MessageSource,
+    @Autowired val licenseRepository: LicenseRepository,
+    @Autowired val serviceConfig: ServiceConfig
+) {
 
-    fun getLicense(licenseId: String, organizationId: String) = License(
-        id = Random(1000).nextInt(1000),
-        licenseId = licenseId,
-        organizationId = organizationId,
-        description = "Software Product",
-        productName = "Ostock",
-        licenseType = "full"
-    )
+    fun getLicense(licenseId: String, organizationId: String) =
+        licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId)
 
-    fun createLicense(license: License?, organizationId: String, locale: Locale?): String {
-        var responseMessage = ""
-        license?.apply {
-            this.organizationId = organizationId
-            responseMessage = String.format(
-                messages.getMessage("license.create.message", null, locale ?: Locale.US),
-                license
-            )
+    fun createLicense(license: License): License {
+        license.licenseId = UUID.randomUUID().toString()
+        licenseRepository.save(license)
+        return license.apply {
+            this.comment = serviceConfig.property
         }
-        return responseMessage
     }
 
-    fun updateLicense(license: License?, organizationId: String, locale: Locale?): String {
-        var responseMessage = ""
-        license?.apply {
-            this.organizationId = organizationId
-            responseMessage = String.format(
-                messages.getMessage("license.update.message", null, locale ?: Locale.US),
-                license
-            )
+    fun updateLicense(license: License): License {
+        licenseRepository.save(license)
+        return license.apply {
+            this.comment = serviceConfig.property
         }
-        return responseMessage
     }
 
-    fun deleteLicense(licenseId: String, organizationId: String, locale: Locale?): String {
+    fun deleteLicense(licenseId: String?, locale: Locale?): String {
+        val license = License()
+        license.licenseId = licenseId
+        licenseRepository.delete(license)
         return String.format(
             messages.getMessage("license.delete.message", null, locale ?: Locale.US),
-            licenseId, organizationId
+            licenseId
         )
     }
 }

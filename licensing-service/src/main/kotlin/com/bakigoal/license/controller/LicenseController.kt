@@ -26,19 +26,19 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
     @PostMapping
     fun createLicense(
         @PathVariable("organizationId") organizationId: String,
-        @RequestBody license: License,
-        @RequestHeader(value = "Accept-Language", required = false) locale: Locale?
-    ): ResponseEntity<String> {
-        return ResponseEntity.ok(licenseService.createLicense(license, organizationId, locale))
+        @RequestBody license: License
+    ): ResponseEntity<License> {
+        return ResponseEntity.ok(licenseService.createLicense(license))
     }
 
-    @PutMapping
+    @PutMapping("/{licenseId}")
     fun updateLicense(
         @PathVariable("organizationId") organizationId: String,
-        @RequestBody license: License,
-        @RequestHeader(value = "Accept-Language", required = false) locale: Locale?
-    ): ResponseEntity<String> {
-        return ResponseEntity.ok(licenseService.updateLicense(license, organizationId, locale))
+        @PathVariable("licenseId") licenseId: String,
+        @RequestBody license: License
+    ): ResponseEntity<License> {
+        license.licenseId = licenseId
+        return ResponseEntity.ok(licenseService.updateLicense(license))
     }
 
     @DeleteMapping("/{licenseId}")
@@ -47,7 +47,7 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
         @PathVariable("licenseId") licenseId: String,
         @RequestHeader(value = "Accept-Language", required = false) locale: Locale?
     ): ResponseEntity<String> {
-        return ResponseEntity.ok(licenseService.deleteLicense(licenseId, organizationId, locale))
+        return ResponseEntity.ok(licenseService.deleteLicense(licenseId, locale))
     }
 
     private fun addHateoasLinks(license: License, organizationId: String) {
@@ -58,11 +58,11 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
             ).withSelfRel(),
             linkTo(
                 methodOn(LicenseController::class.java)
-                    .createLicense(organizationId, license, null)
+                    .createLicense(organizationId, license)
             ).withRel("createLicense"),
             linkTo(
                 methodOn(LicenseController::class.java)
-                    .updateLicense(organizationId, license, null)
+                    .updateLicense(organizationId, "", license)
             ).withRel("updateLicense"),
             linkTo(
                 methodOn(LicenseController::class.java)
