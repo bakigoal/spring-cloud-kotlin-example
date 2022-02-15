@@ -9,6 +9,7 @@ import com.bakigoal.license.repository.LicenseRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
+import java.lang.IllegalArgumentException
 import java.util.*
 import java.util.UUID
 
@@ -39,8 +40,10 @@ class LicenseService(
 
     private fun retrieveOrganization(organizationId: String, clientType: String): OrganizationDto? {
         return when (clientType) {
-            "" -> organizationDiscoveryClient.getOrganization(organizationId)
-            else -> organizationDiscoveryClient.getOrganization(organizationId)
+            "discovery" -> organizationDiscoveryClient.getOrganization(organizationId)
+            "rest" -> organizationDiscoveryClient.getOrganization(organizationId)
+            "feign" -> organizationDiscoveryClient.getOrganization(organizationId)
+            else -> throw IllegalArgumentException("No rest client for $clientType")
         }
     }
 
