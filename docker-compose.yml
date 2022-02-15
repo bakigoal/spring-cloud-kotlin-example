@@ -1,5 +1,6 @@
 version: "3"
 services:
+
   database:
     image: postgres:latest
     ports:
@@ -20,6 +21,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
   config-server:
     build: ./config-server
     ports:
@@ -28,6 +30,7 @@ services:
       backend:
         aliases:
           - "configserver"
+
   eureka-server:
     build: ./eurekaserver
     ports:
@@ -43,6 +46,7 @@ services:
       backend:
         aliases:
           - "eurekaserver"
+
   licensing-service:
     build: ./licensing-service
     environment:
@@ -56,6 +60,22 @@ services:
         condition: service_started
     ports:
       - "8080:8080"
+    networks:
+      - backend
+
+  organization-service:
+    build: ./organization-service
+    environment:
+      SPRING_PROFILES_ACTIVE: "dev"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071"
+      ENCRYPT_KEY: "verySecretKey"
+    depends_on:
+      database:
+        condition: service_healthy
+      config-server:
+        condition: service_started
+    ports:
+      - "8081:8081"
     networks:
       - backend
 
