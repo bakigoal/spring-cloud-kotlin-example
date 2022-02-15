@@ -21,3 +21,11 @@ docker-compose -d up
 ```shell
 docker-compose down --rmi all
 ```
+
+### Debug
+
+Edit Configurations -> New -> Remote JVM Debug
+
+(Must match with docker-compose 
+
+`-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005`)
