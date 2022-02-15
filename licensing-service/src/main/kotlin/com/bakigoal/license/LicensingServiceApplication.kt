@@ -1,12 +1,11 @@
 package com.bakigoal.license
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
 class LicensingServiceApplication
 
 fun main(args: Array<String>) {
-	runApplication<LicensingServiceApplication>(*args)
+    runApplication<LicensingServiceApplication>(*args)
 }
