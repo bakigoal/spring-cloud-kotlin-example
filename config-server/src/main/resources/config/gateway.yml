@@ -25,6 +25,10 @@ spring:
           filters:
             - RewritePath=/organization/(?<path>.*), /$\{path}
 
+logging:
+  level:
+    com.bakigoal: DEBUG
+
 management:
   endpoints:
     web:
