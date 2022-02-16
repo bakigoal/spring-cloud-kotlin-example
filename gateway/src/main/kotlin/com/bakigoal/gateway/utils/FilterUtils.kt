@@ -5,10 +5,12 @@ import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerWebExchange
 import java.util.*
 
-const val CORRELATION_ID = "tmx-correlation-id"
-
 @Component
 class FilterUtils {
+
+    companion object{
+        const val CORRELATION_ID = "tmx-correlation-id"
+    }
 
     fun getCorrelationId(headers: HttpHeaders): Optional<String> =
         Optional.ofNullable(headers[CORRELATION_ID])
