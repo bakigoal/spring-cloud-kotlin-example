@@ -10,11 +10,14 @@ import com.bakigoal.license.mapper.toDto
 import com.bakigoal.license.mapper.toModel
 import com.bakigoal.license.model.License
 import com.bakigoal.license.repository.LicenseRepository
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import java.util.*
 import java.util.UUID
+import java.util.concurrent.TimeoutException
+import kotlin.collections.ArrayList
 
 @Service
 class LicenseService(
@@ -25,6 +28,25 @@ class LicenseService(
     @Autowired val organizationRestTemplateClient: OrganizationRestTemplateClient,
     @Autowired val organizationFeignClient: OrganizationFeignClient
 ) {
+
+    @CircuitBreaker(name = "licenseService", fallbackMethod = "buildFallbackLicenseList")
+    fun getLicensesByOrganization(organizationId: String): List<LicenseDto> {
+        randomlyRunLong()
+        return licenseRepository.findByOrganizationId(organizationId).map { it.toDto() }
+    }
+
+    fun buildFallbackLicenseList(organizationId: String, throwable: Throwable): List<LicenseDto> {
+        val list = ArrayList<LicenseDto>()
+        list.add(LicenseDto(UUID.randomUUID().toString(), organizationId, "Sorry no licensing currently available"))
+        return list
+    }
+
+    private fun randomlyRunLong() {
+        if (Random().nextInt(3) == 1) {
+            Thread.sleep(5000)
+            throw TimeoutException()
+        }
+    }
 
     fun getLicense(licenseId: String, organizationId: String, clientType: String): LicenseDto {
         val license = licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId)
@@ -43,6 +65,7 @@ class LicenseService(
         return dto.apply { this.comment = serviceConfig.property }
     }
 
+    @CircuitBreaker(name = "organizationService")
     private fun retrieveOrganization(organizationId: String, clientType: String): OrganizationDto? {
         return when (clientType) {
             "discovery" -> organizationDiscoveryClient.getOrganization(organizationId)

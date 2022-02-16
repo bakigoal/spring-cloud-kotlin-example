@@ -20,12 +20,18 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-hateoas")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 
     implementation("org.postgresql:postgresql")
+
+    val resilience4jVersion = "1.7.0"
+    implementation("io.github.resilience4j:resilience4j-spring-boot2:$resilience4jVersion")
+    implementation("io.github.resilience4j:resilience4j-circuitbreaker:$resilience4jVersion")
+    implementation("io.github.resilience4j:resilience4j-timelimiter:$resilience4jVersion")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

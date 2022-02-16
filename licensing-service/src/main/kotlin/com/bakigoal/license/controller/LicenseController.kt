@@ -13,6 +13,13 @@ import java.util.*
 @RequestMapping("v1/organization/{organizationId}/license")
 class LicenseController(@Autowired val licenseService: LicenseService) {
 
+    @GetMapping
+    fun getLicenses(
+        @PathVariable("organizationId") organizationId: String
+    ): List<LicenseDto> {
+        return licenseService.getLicensesByOrganization(organizationId)
+    }
+
     @GetMapping("/{licenseId}/{clientType}")
     fun getLicenseWithClient(
         @PathVariable("organizationId") organizationId: String,
