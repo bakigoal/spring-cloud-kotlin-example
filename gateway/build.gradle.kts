@@ -24,6 +24,12 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-gateway")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+
+    // JWT token parsers
+    implementation("commons-codec:commons-codec")
+    // parse the JSON body
+    implementation("org.json:json:20190722")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
