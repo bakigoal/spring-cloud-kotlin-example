@@ -29,3 +29,30 @@ Edit Configurations -> New -> Remote JVM Debug
 (Must match with docker-compose 
 
 `-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005`)
+
+### Keycloak
+
+1) create realm
+2) register a client app (openid-connect)
+   - Access Type: Confidential
+   - Service Accounts Enabled: On
+   - Authorization Enabled: On
+   - Valid Redirect URLs: http://localhost:80*
+   - Web Origins:*
+3) Setup Roles (admin, user)   
+4) Add Users
+5) Copy the token endpoint (Realm settings -> OpenId Endpoint Conf)
+```shell
+POST http://keycloak:8080/auth/realms/baki-realm/protocol/openid-connect/token
+Basic Auth: (client ID / client credentials)
+Body:
+- grant_type = password
+- username
+- password
+```
+The JSON payload contains five attributes:
+- access_token
+- token_type
+- refresh_token
+- expires_in
+- scope

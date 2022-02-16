@@ -26,6 +26,9 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.keycloak:keycloak-spring-boot-starter:11.0.2")
+
     runtimeOnly("org.postgresql:postgresql")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
