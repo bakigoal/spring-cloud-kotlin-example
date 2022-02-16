@@ -7,16 +7,18 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import javax.annotation.security.RolesAllowed
 
 @RestController
-@RequestMapping("v1/organization/{organizationId}")
+@RequestMapping("v1/organization")
 class OrganizationController(@Autowired val organizationService: OrganizationService) {
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(OrganizationController::class.java)
     }
 
-    @GetMapping
+    @RolesAllowed("ADMIN", "USER")
+    @GetMapping("{organizationId}")
     fun getOrganization(
         @PathVariable("organizationId") organizationId: String,
         @RequestHeader headers: Map<String, String>
@@ -24,4 +26,22 @@ class OrganizationController(@Autowired val organizationService: OrganizationSer
         logger.info("received headers: $headers")
         return ResponseEntity.ok(organizationService.getOrganization(organizationId))
     }
+
+    @RolesAllowed("ADMIN")
+    @PostMapping
+    fun createOrganization(
+        @RequestBody organization: Organization
+    ): ResponseEntity<Organization> {
+        return ResponseEntity.ok(organizationService.createOrganization(organization))
+    }
+
+
+    @RolesAllowed("ADMIN")
+    @DeleteMapping("{organizationId}")
+    fun deleteOrganization(
+        @PathVariable("organizationId") organizationId: String
+    ): ResponseEntity<Organization> {
+        return ResponseEntity.ok(organizationService.deleteOrganization(organizationId))
+    }
+
 }
