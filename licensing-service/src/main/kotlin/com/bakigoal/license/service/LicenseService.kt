@@ -6,12 +6,13 @@ import com.bakigoal.license.client.OrganizationRestTemplateClient
 import com.bakigoal.license.config.ServiceConfig
 import com.bakigoal.license.dto.LicenseDto
 import com.bakigoal.license.dto.OrganizationDto
+import com.bakigoal.license.mapper.toDto
+import com.bakigoal.license.mapper.toModel
 import com.bakigoal.license.model.License
 import com.bakigoal.license.repository.LicenseRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
-import java.lang.IllegalArgumentException
 import java.util.*
 import java.util.UUID
 
@@ -28,7 +29,7 @@ class LicenseService(
     fun getLicense(licenseId: String, organizationId: String, clientType: String): LicenseDto {
         val license = licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId)
 
-        val dto = licenseDto(license)
+        val dto = license.toDto()
 
         val organization = retrieveOrganization(organizationId, clientType)
         println("organization: $organization")
@@ -52,19 +53,19 @@ class LicenseService(
     }
 
     fun getLicense(licenseId: String, organizationId: String) =
-        licenseDto(licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId))
+        licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId).toDto()
 
     fun createLicense(licenseDto: LicenseDto): LicenseDto {
-        val license = license(licenseDto)
+        val license = licenseDto.toModel()
         license.licenseId = UUID.randomUUID().toString()
         val saved = licenseRepository.save(license)
-        return licenseDto(saved).apply { this.comment = serviceConfig.property }
+        return saved.toDto().apply { this.comment = serviceConfig.property }
     }
 
 
     fun updateLicense(licenseDto: LicenseDto): LicenseDto {
-        val saved = licenseRepository.save(license(licenseDto))
-        return licenseDto(saved).apply { this.comment = serviceConfig.property }
+        val saved = licenseRepository.save(licenseDto.toModel())
+        return saved.toDto().apply { this.comment = serviceConfig.property }
     }
 
     fun deleteLicense(licenseId: String?, locale: Locale?): String {
@@ -74,26 +75,6 @@ class LicenseService(
         return String.format(
             messages.getMessage("license.delete.message", null, locale ?: Locale.US),
             licenseId
-        )
-    }
-
-    private fun license(licenseDto: LicenseDto): License {
-        return License(
-            licenseId = licenseDto.licenseId,
-            organizationId = licenseDto.organizationId,
-            productName = licenseDto.productName,
-            licenseType = licenseDto.licenseType,
-            description = licenseDto.description
-        )
-    }
-
-    private fun licenseDto(license: License): LicenseDto {
-        return LicenseDto(
-            licenseId = license.licenseId,
-            organizationId = license.organizationId,
-            productName = license.productName,
-            licenseType = license.licenseType,
-            description = license.description
         )
     }
 }
