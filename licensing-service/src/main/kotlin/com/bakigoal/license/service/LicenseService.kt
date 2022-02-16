@@ -11,6 +11,7 @@ import com.bakigoal.license.mapper.toModel
 import com.bakigoal.license.model.License
 import com.bakigoal.license.repository.LicenseRepository
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker
+import io.github.resilience4j.retry.annotation.Retry
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
@@ -30,6 +31,7 @@ class LicenseService(
 ) {
 
     @CircuitBreaker(name = "licenseService", fallbackMethod = "buildFallbackLicenseList")
+    @Retry(name = "retryLicenseService", fallbackMethod = "buildFallbackLicenseList")
     fun getLicensesByOrganization(organizationId: String): List<LicenseDto> {
         randomlyRunLong()
         return licenseRepository.findByOrganizationId(organizationId).map { it.toDto() }
