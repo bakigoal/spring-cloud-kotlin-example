@@ -26,6 +26,9 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.keycloak:keycloak-spring-boot-starter:11.0.2")
+
     implementation("org.postgresql:postgresql")
 
     val resilience4jVersion = "1.7.0"
