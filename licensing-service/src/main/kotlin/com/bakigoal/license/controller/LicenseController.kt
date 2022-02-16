@@ -2,6 +2,9 @@ package com.bakigoal.license.controller
 
 import com.bakigoal.license.dto.LicenseDto
 import com.bakigoal.license.service.LicenseService
+import com.bakigoal.license.util.UserContextFilter
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
@@ -12,6 +15,10 @@ import java.util.*
 @RestController
 @RequestMapping("v1/organization/{organizationId}/license")
 class LicenseController(@Autowired val licenseService: LicenseService) {
+
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(LicenseController::class.java)
+    }
 
     @GetMapping
     fun getLicenses(
@@ -24,8 +31,10 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
     fun getLicenseWithClient(
         @PathVariable("organizationId") organizationId: String,
         @PathVariable("licenseId") licenseId: String,
-        @PathVariable("clientType") clientType: String
+        @PathVariable("clientType") clientType: String,
+        @RequestHeader headers: Map<String, String>
     ): LicenseDto {
+        logger.info("received headers: $headers")
         return licenseService.getLicense(licenseId, organizationId, clientType)
     }
 

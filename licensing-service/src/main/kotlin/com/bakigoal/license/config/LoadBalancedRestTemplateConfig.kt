@@ -1,5 +1,6 @@
 package com.bakigoal.license.config
 
+import com.bakigoal.license.util.UserContextInterceptor
 import org.springframework.cloud.client.loadbalancer.LoadBalanced
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,6 +12,8 @@ class LoadBalancedRestTemplateConfig {
     @Bean
     @LoadBalanced
     fun restTemplate(): RestTemplate {
-        return RestTemplate()
+        val restTemplate = RestTemplate()
+        restTemplate.interceptors.add(UserContextInterceptor())
+        return restTemplate
     }
 }
