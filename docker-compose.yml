@@ -47,6 +47,22 @@ services:
         aliases:
           - "eurekaserver"
 
+  gateway:
+    build: ./gateway
+    ports:
+      - "8072:8072"
+    environment:
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071"
+    depends_on:
+      database:
+        condition: service_healthy
+      config-server:
+        condition: service_started
+    networks:
+      backend:
+        aliases:
+          - "gateway"
+
   licensing-service:
     build: ./licensing-service
     environment:
