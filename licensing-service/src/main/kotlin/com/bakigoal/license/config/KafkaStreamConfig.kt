@@ -18,7 +18,7 @@ class KafkaStreamConfig {
 
     @StreamListener(Sink.INPUT)
     fun loggerSink(orgChange: OrganizationChangeModel) {
-        logger.debug("Received an ${orgChange.action} event for organization id ${orgChange.organizationId}")
+        logger.info("Received an ${orgChange.action} event for organization id ${orgChange.organizationId}")
     }
 }
 

@@ -19,7 +19,7 @@ class SimpleSourceBean(
     }
 
     fun publishOrganizationChange(action: ActionEnum, organizationId: String) {
-        logger.debug("Sending Kafka message {} for Organization Id: {}", action, organizationId)
+        logger.info("Sending Kafka message {} for Organization Id: {}", action, organizationId)
         val change = OrganizationChangeModel(
             OrganizationChangeModel::class.java.typeName,
             action.toString(),
