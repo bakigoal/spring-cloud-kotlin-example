@@ -26,7 +26,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     // messaging
-    implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
+    implementation ("org.springframework.kafka:spring-kafka")
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.keycloak:keycloak-spring-boot-starter:11.0.2")
