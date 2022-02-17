@@ -1,4 +1,4 @@
-package com.bakigoal.license.util
+package com.bakigoal.organizationservice.util
 
 import org.springframework.stereotype.Component
 
