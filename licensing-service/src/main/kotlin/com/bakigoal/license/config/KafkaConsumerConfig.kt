@@ -1,7 +1,7 @@
 package com.bakigoal.license.config
 
+import com.bakigoal.license.events.OrganizationChangeModel
 import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.kafka.common.serialization.IntegerDeserializer
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -10,6 +10,7 @@ import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
+import org.springframework.kafka.support.serializer.JsonDeserializer
 
 
 @Configuration
@@ -23,11 +24,24 @@ class KafkaConsumerConfig {
     private val kafkaGroupId: String? = null
 
     @Bean
-    fun kafkaListenerContainerFactory(consumerFactory: ConsumerFactory<String, String>) =
-        ConcurrentKafkaListenerContainerFactory<String, String>().also { it.consumerFactory = consumerFactory }
+    fun kafkaListenerContainerFactory(consumerFactory: ConsumerFactory<String, OrganizationChangeModel>) =
+        ConcurrentKafkaListenerContainerFactory<String, OrganizationChangeModel>().also {
+            it.consumerFactory = consumerFactory
+        }
 
     @Bean
-    fun consumerFactory() = DefaultKafkaConsumerFactory<String, String>(consumerProps())
+    fun consumerFactory(): DefaultKafkaConsumerFactory<String, OrganizationChangeModel> {
+        val jsonDeserializer = JsonDeserializer(OrganizationChangeModel::class.java)
+        jsonDeserializer.setRemoveTypeHeaders(false);
+        jsonDeserializer.addTrustedPackages("*");
+        jsonDeserializer.setUseTypeMapperForKey(true);
+
+        return DefaultKafkaConsumerFactory(
+            consumerProps(),
+            StringDeserializer(),
+            jsonDeserializer
+        )
+    }
 
     fun consumerProps() = mapOf(
         ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to kafkaServer,

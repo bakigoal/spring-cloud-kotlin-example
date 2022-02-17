@@ -16,7 +16,7 @@ class OrganizationEventListener {
         id = "organization-change-model",
         topics = ["organization_change_topic"]
     )
-    fun organizationChanged(orgChange: String) {
-        logger.info("Received an $orgChange event ")
+    fun organizationChanged(orgChange: OrganizationChangeModel) {
+        logger.info("Received an $orgChange")
     }
 }

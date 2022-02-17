@@ -13,7 +13,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback
 
 @Component
 class EventPublisher(
-    @Autowired val kafkaTemplate: KafkaTemplate<String, String>
+    @Autowired val kafkaTemplate: KafkaTemplate<String, OrganizationChangeModel>
 ) {
 
     companion object {
@@ -25,20 +25,22 @@ class EventPublisher(
 
     fun publishOrganizationChange(action: ActionEnum, organizationId: String) {
         logger.info("Sending Kafka message {} for Organization Id: {}", action, organizationId)
-        val model = createMessage(action, organizationId)
 
-        val future = kafkaTemplate.send(orgChangeTopic!!, organizationId, action.name)
+        kafkaTemplate
+            .send(orgChangeTopic!!, organizationId, createMessage(action, organizationId))
+            .addCallback(sendStatusCallback(organizationId))
+    }
 
-        future.addCallback(object : ListenableFutureCallback<SendResult<String, String>> {
-            override fun onSuccess(result: SendResult<String, String>?) {
+    private fun sendStatusCallback(organizationId: String) =
+        object : ListenableFutureCallback<SendResult<String, OrganizationChangeModel>> {
+            override fun onSuccess(result: SendResult<String, OrganizationChangeModel>?) {
                 logger.info("Successfully sent message $organizationId")
             }
 
             override fun onFailure(ex: Throwable) {
                 logger.info("Error while sending message $organizationId")
             }
-        })
-    }
+        }
 
     private fun createMessage(action: ActionEnum, organizationId: String) = OrganizationChangeModel(
         OrganizationChangeModel::class.java.typeName,
