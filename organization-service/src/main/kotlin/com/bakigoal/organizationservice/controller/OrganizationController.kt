@@ -23,7 +23,7 @@ class OrganizationController(@Autowired val organizationService: OrganizationSer
         @PathVariable("organizationId") organizationId: String,
         @RequestHeader headers: Map<String, String>
     ): ResponseEntity<Organization> {
-        logger.info("received headers: $headers")
+        logger.info("Organization Service received headers: $headers")
         return ResponseEntity.ok(organizationService.getOrganization(organizationId))
     }
 

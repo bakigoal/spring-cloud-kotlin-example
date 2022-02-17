@@ -56,3 +56,11 @@ The JSON payload contains five attributes:
 - refresh_token
 - expires_in
 - scope
+
+### CorrelationID
+
+Correlation ID is a unique number that’s generated at the start of a user’s transaction 
+and passed along with every service call. 
+It should also be passed along with every message that’s published and consumed.
+Having things like correlation IDs for tracking a user’s transactions across web service invocations
+and messages is critical to understanding and debugging what’s going on in our application.
