@@ -39,12 +39,22 @@ class OrganizationRestTemplateClient(
         return dto
     }
 
-    private fun putToCache(organization: Organization) {
-        redisRepository.save(organization)
+    private fun getFromCache(organizationId: String): Optional<Organization> {
+        try {
+            return redisRepository.findById(organizationId)
+        } catch (e: Exception) {
+            logger.error("Error encountered while trying to retrieve organization $organizationId in Redis. Exception $e")
+        }
+        return Optional.empty()
     }
 
-    private fun getFromCache(organizationId: String): Optional<Organization> =
-        redisRepository.findById(organizationId)
+    private fun putToCache(organization: Organization) {
+        try {
+            redisRepository.save(organization)
+        } catch (e: Exception) {
+            logger.error("Unable to cache organization ${organization.id} in Redis. Exception $e}")
+        }
+    }
 
     private fun getFromOrganizationService(organizationId: String): OrganizationDto? {
         val serviceUri = "http://gateway:8072/organization/v1/organization/$organizationId"
