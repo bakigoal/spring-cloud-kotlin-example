@@ -30,6 +30,10 @@ dependencies {
     // parse the JSON body
     implementation("org.json:json:20190722")
 
+    // tracing and logging
+    implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
+    implementation("net.logstash.logback:logstash-logback-encoder:7.0.1")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

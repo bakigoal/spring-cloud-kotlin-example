@@ -33,8 +33,9 @@ dependencies {
     // caching
     implementation("org.springframework.data:spring-data-redis")
     implementation("redis.clients:jedis")
-    // tracing
+    // tracing and logging
     implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
+    implementation("net.logstash.logback:logstash-logback-encoder:7.0.1")
 
     implementation("org.postgresql:postgresql")
 
