@@ -30,6 +30,9 @@ dependencies {
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.keycloak:keycloak-spring-boot-starter:11.0.2")
+    // caching
+    implementation("org.springframework.data:spring-data-redis")
+    implementation("redis.clients:jedis")
 
     implementation("org.postgresql:postgresql")
 
