@@ -5,13 +5,14 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cloud.gateway.filter.GlobalFilter
+import org.springframework.cloud.sleuth.Tracer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import reactor.core.publisher.Mono
 
 @Configuration
 class ResponseFilter(
-    @Autowired val filterUtils: FilterUtils
+    @Autowired val tracer: Tracer
 ) {
 
     companion object {
@@ -19,13 +20,16 @@ class ResponseFilter(
     }
 
     @Bean
-    fun postGlobalFilter(): GlobalFilter = GlobalFilter { exchange, chain ->
-        chain.filter(exchange).then(Mono.fromRunnable {
-            val headers = exchange.request.headers
-            val correlationId = filterUtils.getCorrelationId(headers)
-            logger.debug("Added the correlation id to the outbound headers. ${correlationId.get()}")
-            exchange.response.headers.add(FilterUtils.CORRELATION_ID, correlationId.get())
-            logger.debug("Completing outgoing request for ${exchange.request.uri}.")
-        })
+    fun postGlobalFilter(): GlobalFilter {
+        return GlobalFilter { exchange, chain ->
+
+            val traceId = tracer.currentSpan()?.context()?.traceId()
+
+            chain.filter(exchange).then(Mono.fromRunnable {
+                logger.debug("Added the correlation id to the outbound headers. $traceId")
+                exchange.response.headers.add(FilterUtils.CORRELATION_ID, traceId)
+                logger.debug("Completing outgoing request for ${exchange.request.uri}.")
+            })
+        }
     }
 }
