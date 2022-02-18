@@ -33,6 +33,8 @@ dependencies {
     // caching
     implementation("org.springframework.data:spring-data-redis")
     implementation("redis.clients:jedis")
+    // tracing
+    implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
 
     implementation("org.postgresql:postgresql")
 

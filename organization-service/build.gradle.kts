@@ -30,6 +30,8 @@ dependencies {
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.keycloak:keycloak-spring-boot-starter:11.0.2")
+    // tracing
+    implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
 
     runtimeOnly("org.postgresql:postgresql")
 
