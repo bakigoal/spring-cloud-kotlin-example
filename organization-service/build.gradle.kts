@@ -32,7 +32,6 @@ dependencies {
     implementation("org.keycloak:keycloak-spring-boot-starter:11.0.2")
     // tracing and logging
     implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
-    implementation("net.logstash.logback:logstash-logback-encoder:7.0.1")
 
     runtimeOnly("org.postgresql:postgresql")
 

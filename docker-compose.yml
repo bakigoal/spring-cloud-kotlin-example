@@ -96,6 +96,7 @@ services:
         aliases:
           - "keycloak"
 
+  # SPRING BOOT SERVICES  ----------------------------------------------
   config-server:
     build: ./config-server
     ports:

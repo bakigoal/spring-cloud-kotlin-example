@@ -35,7 +35,6 @@ dependencies {
     implementation("redis.clients:jedis")
     // tracing and logging
     implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
-    implementation("net.logstash.logback:logstash-logback-encoder:7.0.1")
 
     implementation("org.postgresql:postgresql")
 
