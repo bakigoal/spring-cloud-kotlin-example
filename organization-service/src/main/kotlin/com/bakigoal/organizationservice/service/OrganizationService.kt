@@ -19,14 +19,21 @@ class OrganizationService(
 
     fun createOrganization(organization: Organization): Organization {
         organization.organizationId = UUID.randomUUID().toString()
-        val saved = organizationRepository.save(organization)
-        eventPublisher.publishOrganizationChange(ActionEnum.CREATED, saved.organizationId!!)
-        return saved
+        val created = organizationRepository.save(organization)
+        eventPublisher.publishOrganizationChange(ActionEnum.CREATED, created.organizationId!!)
+        return created
+    }
+
+    fun updateOrganization(organization: Organization): Organization {
+        val updated = organizationRepository.save(organization)
+        eventPublisher.publishOrganizationChange(ActionEnum.UPDATED, updated.organizationId!!)
+        return updated
     }
 
     fun deleteOrganization(organizationId: String): Organization {
-        val organization = organizationRepository.findById(organizationId).orElseThrow()
-        organizationRepository.delete(organization)
-        return organization
+        val deleted = organizationRepository.findById(organizationId).orElseThrow()
+        organizationRepository.delete(deleted)
+        eventPublisher.publishOrganizationChange(ActionEnum.DELETED, deleted.organizationId!!)
+        return deleted
     }
 }

@@ -35,6 +35,16 @@ class OrganizationController(@Autowired val organizationService: OrganizationSer
         return ResponseEntity.ok(organizationService.createOrganization(organization))
     }
 
+    @RolesAllowed("ADMIN")
+    @PutMapping("{organizationId}")
+    fun updateOrganization(
+        @PathVariable("organizationId") organizationId: String,
+        @RequestBody organization: Organization
+    ): ResponseEntity<Organization> {
+        organization.organizationId = organizationId
+        return ResponseEntity.ok(organizationService.updateOrganization(organization))
+    }
+
 
     @RolesAllowed("ADMIN")
     @DeleteMapping("{organizationId}")

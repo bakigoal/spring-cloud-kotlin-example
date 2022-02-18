@@ -52,5 +52,5 @@ class EventPublisher(
 }
 
 enum class ActionEnum {
-    GET, CREATED, UPDATED, DELETED
+    CREATED, UPDATED, DELETED
 }
