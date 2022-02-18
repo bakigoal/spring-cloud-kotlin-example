@@ -3,3 +3,8 @@ spring:
     name: organization-service
   config:
     import: configserver:http://localhost:8071
+
+
+logging:
+  level:
+    com.bakigoal: DEBUG

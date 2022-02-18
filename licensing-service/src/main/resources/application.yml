@@ -4,6 +4,10 @@ spring:
   config:
     import: configserver:http://localhost:8071
 
+logging:
+  level:
+    com.bakigoal: DEBUG
+
 resilience4j.circuitbreaker:
   instances:
     licenseService:
