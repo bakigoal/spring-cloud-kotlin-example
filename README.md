@@ -68,4 +68,7 @@ and messages is critical to understanding and debugging what’s going on in our
 
 ### Metrics
 
+- Prometheus:
 http://localhost:9090/targets
+- Grafana:
+http://localhost:3000/
