@@ -4,17 +4,42 @@ import com.bakigoal.organizationservice.events.ActionEnum
 import com.bakigoal.organizationservice.events.EventPublisher
 import com.bakigoal.organizationservice.model.Organization
 import com.bakigoal.organizationservice.repository.OrganizationRepository
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cloud.sleuth.Tracer
 import org.springframework.stereotype.Service
+import java.lang.IllegalArgumentException
 import java.util.*
 
 @Service
 class OrganizationService(
     @Autowired val organizationRepository: OrganizationRepository,
-    @Autowired val eventPublisher: EventPublisher
+    @Autowired val eventPublisher: EventPublisher,
+    @Autowired val tracer: Tracer
 ) {
+
+    companion object{
+        val logger: Logger = LoggerFactory.getLogger(OrganizationService::class.java)
+    }
+
     fun getOrganization(organizationId: String): Organization {
-        return organizationRepository.findById(organizationId).orElseThrow()
+        val span = tracer.startScopedSpan("getOrgDBCall")
+        try {
+            val organizationOptional = organizationRepository.findById(organizationId)
+            if (!organizationOptional.isPresent){
+                val message = "Unable to find organization with id = $organizationId"
+                logger.error(message)
+                throw IllegalArgumentException(message)
+            }
+            val organization = organizationOptional.get()
+            logger.debug("Retrieving Organization Info: $organization")
+            return organization
+        } finally {
+            span.tag("peer.service", "postgres")
+            span.event("Client received")
+            span.end()
+        }
     }
 
     fun createOrganization(organization: Organization): Organization {
