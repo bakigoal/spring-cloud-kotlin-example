@@ -10,6 +10,7 @@ import org.keycloak.adapters.springsecurity.client.KeycloakRestTemplate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cloud.sleuth.Tracer
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
 import java.util.*
@@ -17,7 +18,8 @@ import java.util.*
 @Component
 class OrganizationRestTemplateClient(
     @Autowired val restTemplate: KeycloakRestTemplate,
-    @Autowired val redisRepository: OrganizationRedisRepository
+    @Autowired val redisRepository: OrganizationRedisRepository,
+    @Autowired val tracer: Tracer
 ) {
 
     companion object {
@@ -40,10 +42,15 @@ class OrganizationRestTemplateClient(
     }
 
     private fun getFromCache(organizationId: String): Optional<Organization> {
+        val span = tracer.startScopedSpan("readLicensingDataFromRedis")
         try {
             return redisRepository.findById(organizationId)
         } catch (e: Exception) {
             logger.error("Error encountered while trying to retrieve organization $organizationId in Redis. Exception $e")
+        } finally {
+            span.tag("peer.service", "redis")
+            span.event("Client received")
+            span.end()
         }
         return Optional.empty()
     }
