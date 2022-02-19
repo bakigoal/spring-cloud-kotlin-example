@@ -3,3 +3,8 @@ spring:
     name: gateway
   config:
     import: configserver:http://configserver:8071
+  zipkin:
+    baseUrl: http://zipkin:9411/
+  sleuth:
+    sampler:
+      probability: 1

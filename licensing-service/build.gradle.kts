@@ -34,7 +34,8 @@ dependencies {
     implementation("org.springframework.data:spring-data-redis")
     implementation("redis.clients:jedis")
     // tracing and logging
-    implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
+    implementation("org.springframework.cloud:spring-cloud-starter-zipkin:2.2.8.RELEASE")
+
 
     implementation("org.postgresql:postgresql")
 

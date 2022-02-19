@@ -31,7 +31,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.keycloak:keycloak-spring-boot-starter:11.0.2")
     // tracing and logging
-    implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
+    implementation("org.springframework.cloud:spring-cloud-starter-zipkin:2.2.8.RELEASE")
 
     runtimeOnly("org.postgresql:postgresql")
 

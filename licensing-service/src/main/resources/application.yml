@@ -3,6 +3,11 @@ spring:
     name: licensing-service
   config:
     import: configserver:http://localhost:8071
+  zipkin:
+    baseUrl: http://zipkin:9411/
+  sleuth:
+    sampler:
+      probability: 1
 
 logging:
   level:
