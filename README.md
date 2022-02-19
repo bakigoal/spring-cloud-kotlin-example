@@ -64,3 +64,8 @@ and passed along with every service call.
 It should also be passed along with every message that’s published and consumed.
 Having things like correlation IDs for tracking a user’s transactions across web service invocations
 and messages is critical to understanding and debugging what’s going on in our application.
+
+
+### Metrics
+
+http://localhost:9090/targets
