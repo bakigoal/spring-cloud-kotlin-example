@@ -65,6 +65,9 @@ It should also be passed along with every message that’s published and consume
 Having things like correlation IDs for tracking a user’s transactions across web service invocations
 and messages is critical to understanding and debugging what’s going on in our application.
 
+### Tracing
+- zipkin
+http://localhost:9411/zipkin/
 
 ### Metrics
 
