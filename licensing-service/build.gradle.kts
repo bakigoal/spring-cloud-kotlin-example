@@ -35,7 +35,9 @@ dependencies {
     implementation("redis.clients:jedis")
     // tracing and logging
     implementation("org.springframework.cloud:spring-cloud-starter-zipkin:2.2.8.RELEASE")
-
+    // metrics
+    implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("io.micrometer:micrometer-core")
 
     implementation("org.postgresql:postgresql")
 

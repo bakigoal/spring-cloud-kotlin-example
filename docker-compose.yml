@@ -106,6 +106,18 @@ services:
         aliases:
           - "zipkin"
 
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus/config.yml:/etc/prometheus/prometheus.yml
+    container_name: prometheus
+    networks:
+      backend:
+        aliases:
+          - "prometheus"
+
   # SPRING BOOT SERVICES  ----------------------------------------------
   config-server:
     build: ./config-server
@@ -164,7 +176,10 @@ services:
       - "8180:8080"
       - "5005:5005"
     networks:
-      - backend
+      backend:
+        aliases:
+          - "licensingservice"
+
 
   organization-service:
     build: ./organization-service
@@ -180,7 +195,9 @@ services:
     ports:
       - "8280:8080"
     networks:
-      - backend
+      backend:
+        aliases:
+          - "organizationservice"
 
 volumes:
   postgres_data:

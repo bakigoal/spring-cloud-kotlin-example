@@ -32,6 +32,9 @@ dependencies {
     implementation("org.keycloak:keycloak-spring-boot-starter:11.0.2")
     // tracing and logging
     implementation("org.springframework.cloud:spring-cloud-starter-zipkin:2.2.8.RELEASE")
+    // metrics
+    implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("io.micrometer:micrometer-core")
 
     runtimeOnly("org.postgresql:postgresql")
 

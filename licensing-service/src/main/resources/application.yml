@@ -9,6 +9,12 @@ spring:
     sampler:
       probability: 1
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
 logging:
   level:
     com.bakigoal: DEBUG
