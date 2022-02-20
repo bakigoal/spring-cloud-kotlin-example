@@ -13,6 +13,9 @@ eureka:
 spring:
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
       routes:
         - id: organization-service
           uri: lb://organization-service
@@ -28,6 +31,12 @@ spring:
           filters:
             - RewritePath=/license/(?<path>.*), /$\{path}
             - RemoveRequestHeader= Cookie,Set-Cookie
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/api-docs
 
 logging:
   level:

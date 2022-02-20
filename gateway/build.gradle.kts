@@ -33,6 +33,12 @@ dependencies {
     // tracing and logging
     implementation("org.springframework.cloud:spring-cloud-starter-zipkin:2.2.8.RELEASE")
 
+    // openapi
+    val openApiVersion = "1.6.6"
+    implementation("org.springdoc:springdoc-openapi-webflux-core:$openApiVersion")
+    implementation("org.springdoc:springdoc-openapi-webflux-ui:$openApiVersion")
+    implementation("org.springdoc:springdoc-openapi-kotlin:$openApiVersion")
+
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
