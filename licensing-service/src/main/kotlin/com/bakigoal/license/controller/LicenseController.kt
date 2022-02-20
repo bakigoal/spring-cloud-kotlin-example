@@ -3,6 +3,8 @@ package com.bakigoal.license.controller
 import com.bakigoal.license.dto.LicenseDto
 import com.bakigoal.license.service.LicenseService
 import com.bakigoal.license.util.UserContextFilter
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,6 +23,7 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
     }
 
     @GetMapping
+    @Operation(security = [SecurityRequirement(name = "bearerAuth")] )
     fun getLicenses(
         @PathVariable("organizationId") organizationId: String
     ): List<LicenseDto> {
@@ -28,6 +31,7 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
     }
 
     @GetMapping("/{licenseId}/{clientType}")
+    @Operation(security = [SecurityRequirement(name = "bearerAuth")] )
     fun getLicenseWithClient(
         @PathVariable("organizationId") organizationId: String,
         @PathVariable("licenseId") licenseId: String,
@@ -39,6 +43,7 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
     }
 
     @GetMapping("/{licenseId}")
+    @Operation(security = [SecurityRequirement(name = "bearerAuth")] )
     fun getLicense(
         @PathVariable("organizationId") organizationId: String,
         @PathVariable("licenseId") licenseId: String
@@ -49,6 +54,7 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
     }
 
     @PostMapping
+    @Operation(security = [SecurityRequirement(name = "bearerAuth")] )
     fun createLicense(
         @PathVariable("organizationId") organizationId: String,
         @RequestBody license: LicenseDto
@@ -57,6 +63,7 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
     }
 
     @PutMapping("/{licenseId}")
+    @Operation(security = [SecurityRequirement(name = "bearerAuth")] )
     fun updateLicense(
         @PathVariable("organizationId") organizationId: String,
         @PathVariable("licenseId") licenseId: String,
@@ -67,6 +74,7 @@ class LicenseController(@Autowired val licenseService: LicenseService) {
     }
 
     @DeleteMapping("/{licenseId}")
+    @Operation(security = [SecurityRequirement(name = "bearerAuth")] )
     fun deleteLicense(
         @PathVariable("organizationId") organizationId: String,
         @PathVariable("licenseId") licenseId: String,

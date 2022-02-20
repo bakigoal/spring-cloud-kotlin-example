@@ -35,6 +35,10 @@ dependencies {
     // metrics
     implementation("io.micrometer:micrometer-registry-prometheus")
     implementation("io.micrometer:micrometer-core")
+    // openapi
+    val openApiVersion = "1.6.6"
+    implementation("org.springdoc:springdoc-openapi-ui:$openApiVersion")
+    implementation("org.springdoc:springdoc-openapi-kotlin:$openApiVersion")
 
     runtimeOnly("org.postgresql:postgresql")
 

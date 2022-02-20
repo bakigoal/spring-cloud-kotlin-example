@@ -18,3 +18,6 @@ management:
 logging:
   level:
     com.bakigoal: DEBUG
+
+# /api-docs endpoint custom path
+springdoc.api-docs.path: /api-docs

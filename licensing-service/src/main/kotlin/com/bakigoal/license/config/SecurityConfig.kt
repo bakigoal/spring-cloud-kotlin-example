@@ -44,7 +44,7 @@ class SecurityConfig : KeycloakWebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         super.configure(http)
         http.authorizeRequests()
-            .antMatchers("/actuator/prometheus")
+            .antMatchers("/actuator/prometheus", "/api-docs", "/api-docs/**", "/swagger-ui*/**")
             .permitAll()
             .anyRequest()
             .authenticated()

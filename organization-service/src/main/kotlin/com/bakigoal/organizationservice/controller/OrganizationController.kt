@@ -2,6 +2,8 @@ package com.bakigoal.organizationservice.controller
 
 import com.bakigoal.organizationservice.model.Organization
 import com.bakigoal.organizationservice.service.OrganizationService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +21,7 @@ class OrganizationController(@Autowired val organizationService: OrganizationSer
 
     @RolesAllowed("ADMIN", "USER")
     @GetMapping("{organizationId}")
+    @Operation(security = [SecurityRequirement(name = "bearerAuth")] )
     fun getOrganization(
         @PathVariable("organizationId") organizationId: String,
         @RequestHeader headers: Map<String, String>
@@ -29,6 +32,7 @@ class OrganizationController(@Autowired val organizationService: OrganizationSer
 
     @RolesAllowed("ADMIN")
     @PostMapping
+    @Operation(security = [SecurityRequirement(name = "bearerAuth")] )
     fun createOrganization(
         @RequestBody organization: Organization
     ): ResponseEntity<Organization> {
@@ -37,6 +41,7 @@ class OrganizationController(@Autowired val organizationService: OrganizationSer
 
     @RolesAllowed("ADMIN")
     @PutMapping("{organizationId}")
+    @Operation(security = [SecurityRequirement(name = "bearerAuth")] )
     fun updateOrganization(
         @PathVariable("organizationId") organizationId: String,
         @RequestBody organization: Organization
@@ -48,6 +53,7 @@ class OrganizationController(@Autowired val organizationService: OrganizationSer
 
     @RolesAllowed("ADMIN")
     @DeleteMapping("{organizationId}")
+    @Operation(security = [SecurityRequirement(name = "bearerAuth")] )
     fun deleteOrganization(
         @PathVariable("organizationId") organizationId: String
     ): ResponseEntity<Organization> {
