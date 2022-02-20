@@ -184,7 +184,7 @@ services:
       config-server:
         condition: service_started
     ports:
-      - "8180:8080"
+      - "8180:8180"
       - "5005:5005"
     networks:
       backend:
@@ -204,7 +204,7 @@ services:
       config-server:
         condition: service_started
     ports:
-      - "8280:8080"
+      - "8280:8280"
     networks:
       backend:
         aliases:

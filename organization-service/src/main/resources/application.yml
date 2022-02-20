@@ -9,6 +9,7 @@ spring:
     sampler:
       probability: 1
 
+
 management:
   endpoints:
     web:
@@ -21,3 +22,6 @@ logging:
 
 # /api-docs endpoint custom path
 springdoc.api-docs.path: /api-docs
+
+server:
+  port: 8280
