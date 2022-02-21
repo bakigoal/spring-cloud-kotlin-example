@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cloud.gateway.filter.GatewayFilterChain
 import org.springframework.cloud.gateway.filter.GlobalFilter
+import org.springframework.cloud.sleuth.Tracer
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
@@ -17,7 +18,8 @@ import java.util.*
 @Component
 @Order(1)
 class TrackingFilter(
-    @Autowired val filterUtils: FilterUtils
+    @Autowired val filterUtils: FilterUtils,
+    @Autowired val tracer: Tracer
 ) : GlobalFilter {
 
     private val logger: Logger = LoggerFactory.getLogger(TrackingFilter::class.java)
@@ -32,9 +34,9 @@ class TrackingFilter(
             return chain.filter(exchange)
         }
 
-        val generatedCorrelationId = UUID.randomUUID().toString()
-        logger.debug("tmx-correlation-id generated in tracking filter: $generatedCorrelationId")
-        return chain.filter(filterUtils.setCorrelationId(exchange, generatedCorrelationId))
+        val traceId = tracer.currentSpan()!!.context()!!.traceId()
+        logger.debug("tmx-correlation-id generated in tracking filter: $traceId")
+        return chain.filter(filterUtils.setCorrelationId(exchange, traceId))
     }
 
     private fun getUsername(headers: HttpHeaders): String {
