@@ -155,6 +155,15 @@ services:
         aliases:
           - "eurekaserver"
 
+  admin:
+    build: ./admin
+    ports:
+      - "8888:8888"
+    networks:
+      backend:
+        aliases:
+          - "admin"
+
   gateway:
     build: ./gateway
     ports:
